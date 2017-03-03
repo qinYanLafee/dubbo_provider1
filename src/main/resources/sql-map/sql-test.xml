@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap>
+
+    <typeAlias type="com.raycloud.myproject.test.entity.User" alias="user"/>
+    <resultMap id="user" class="user" >
+        <result column="id" property="id" jdbcType="INT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+    </resultMap>
+    <!-- 获得全查询列表 -->
+    <!-- 获得全查询列表 -->
+    <select id="selectUserByName" resultMap="user" parameterClass="java.lang.String">
+        select id,name,password,address
+        from users
+        where name = #name#
+    </select>
+
+    <select id="selectUserByPage" resultMap="user" parameterClass="int">
+        select id,name,password,address
+        from users
+        where 1
+        limit #page#,2
+    </select>
+    <select id="selectNumber" resultClass="int">
+        select count(*) from  users
+    </select>
+
+</sqlMap>

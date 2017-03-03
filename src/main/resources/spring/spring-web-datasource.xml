@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans default-autowire="byName"
+       xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="url" value="jdbc:mysql://127.0.0.1:3306/MYSQL?useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true"/>
+        <property name="username" value="root"/>
+        <property name="password" value="tiger"/>
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="filters" value="stat"/>
+        <property name="maxActive" value="1000"/>
+        <property name="initialSize" value="5"/>
+        <property name="maxWait" value="10000"/>
+        <property name="minIdle" value="1"/>
+        <property name="timeBetweenEvictionRunsMillis" value="3000"/>
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+        <property name="validationQuery" value="SELECT 'x'"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnReturn" value="false"/>
+        <property name="poolPreparedStatements" value="false"/>
+    </bean>
+    <context:component-scan base-package="com.raycloud.myproject.test"/>
+    <!-- ======================================================================== -->
+    <!-- iBatis SQL map定义。 -->
+    <!-- ======================================================================== -->
+    <bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+        <property name="configLocation">
+            <value>classpath:sql-map/sqlmap-config.xml</value>
+        </property>
+    </bean>
+
+    <!-- ======================================================================== -->
+    <!-- TransactionManager定义。 -->
+    <!-- ========================================================================-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="delete*" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="add*" propagation="REQUIRED" />
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- 提供方应用信息，用于计算依赖关系 -->
+    <dubbo:application name="xs_provider" />
+
+    <!-- 使用multicast广播注册中心暴露服务地址 -->
+    <!--<dubbo:registry address="multicast://224.5.6.7:1234" /> -->
+
+    <!-- 使用zookeeper注册中心暴露服务地址 -即zookeeper的所在服务器ip地址和端口号 -->
+    <dubbo:registry address="zookeeper://127.0.0.1:2181" /><!--消费者者的IP-->
+
+    <!-- 用dubbo协议在20880端口暴露服务 -->
+    <dubbo:protocol name="dubbo" port="3880" host="127.0.0.1" /><!--本电脑的ip-->
+
+    <!-- 声明需要暴露的服务接口 -->
+    <dubbo:service interface="com.raycloud.myproject.test.dao.IUserDAO"
+                   ref="iUserDAO" version="1.0.0"/><!-- 版本号 -->
+
+    <!-- 具体的实现bean -->
+    <bean id="iUserDAO" class="com.raycloud.myproject.test.dao.impl.DaoImpl" />
+
+
+   <!-- <aop:config>
+    <aop:pointcut id="allManagerMethod" expression="execution(* com.raycloud.myproject.test.service.*.*(..))" />
+    <aop:advisor advice-ref="txAdvice" pointcut-ref="allManagerMethod" />
+</aop:config>-->
+
+    <bean id="DaoImpl" class="com.raycloud.myproject.test.dao.impl.DaoImpl">
+        <property name="dataSource">
+            <ref local="dataSource"/>
+        </property>
+        <property name="sqlMapClient">
+            <ref local="sqlMapClient"/>
+        </property>
+    </bean>
+
+</beans>

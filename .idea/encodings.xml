@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/raycloud/myproject/test/dao/IUserDAO.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/raycloud/myproject/test/dao/impl/DaoImpl.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/raycloud/myproject/test/entity/User.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/raycloud/myproject/test/provider/Provider.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/log4j.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/spring" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/sql-map" charset="UTF-8" />
+  </component>
+</project>
+

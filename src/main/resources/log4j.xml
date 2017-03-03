@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+
+    <appender name="DEBUG_LOGGER" class="org.apache.log4j.ConsoleAppender">
+        <!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 test dev -->
+        <param name="Append" value="true" />
+        <param name="MaxBackupIndex" value="10" />
+        <param name="MaxFileSize" value="4096" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %5p [%F:%L]  - %m%n" />
+        </layout>
+    </appender>
+
+    <logger name="com.raycloud.questionnaire" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="DEBUG_LOGGER" />
+    </logger>
+    <logger name="log4j.logger.com.springframework" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="DEBUG_LOGGER" />
+    </logger>
+    <logger name="log4j.logger.org.mybatis" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="DEBUG_LOGGER" />
+    </logger>
+    <logger name="log4j.logger.com.ibatis.common.jdbc.SimpleDataSource" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="DEBUG_LOGGER" />
+    </logger>
+    <logger name="log4j.logger.com.ibatis.common.jdbc.ScriptRunner" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="DEBUG_LOGGER" />
+    </logger>
+    <logger name="log4j.logger.com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="DEBUG_LOGGER" />
+    </logger>
+    <logger name="log4j.logger.java.sql.Connection" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="DEBUG_LOGGER" />
+    </logger>
+    <logger name="log4j.logger.java.sql.Statement" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="DEBUG_LOGGER" />
+    </logger>
+    <logger name="log4j.logger.java.sql.PreparedStatement" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="DEBUG_LOGGER" />
+    </logger>
+    <logger name="log4j.logger.java.sql.ResultSet" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="DEBUG_LOGGER" />
+    </logger>
+
+    <root>
+        <priority value="INFO" />
+        <appender-ref ref="DEBUG_LOGGER" />
+        <!-- 添加一个错误日志的配置,错误日志的JSON格式输出实现 -->
+                <appender-ref ref="TRACE_ERROR_LOGGER"/>
+    </root>
+
+</log4j:configuration>
